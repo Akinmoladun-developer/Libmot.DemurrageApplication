@@ -18,7 +18,7 @@ namespace Libmot.DemurrageApplicationAPI.Controllers
             _authService = authService;
         }
 
-        /// <summary>Public — anyone can register as a Customer</summary>
+        
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
@@ -29,7 +29,7 @@ namespace Libmot.DemurrageApplicationAPI.Controllers
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
-        /// <summary>Public — login and receive JWT</summary>
+        // Merchant/Customer can login and receive JWT
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
@@ -40,7 +40,7 @@ namespace Libmot.DemurrageApplicationAPI.Controllers
             return response.Success ? Ok(response) : Unauthorized(response);
         }
 
-        /// <summary>Authenticated — change own password</summary>
+        // Authenticating and merchant/customer change of password
         [HttpPut("change-password")]
         [Authorize]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
@@ -69,7 +69,7 @@ namespace Libmot.DemurrageApplicationAPI.Controllers
             return Ok(response);
         }
 
-        // <summary>SuperAdmin only — deactivate a user</summary>
+        // Deactivating merchant's/customer account for violating Terms of Service. Access available to SuperAdmin only
         [HttpPatch("deactivate/{userId}")]
         [Authorize(Policy = "SuperAdminOnly")]
         public async Task<IActionResult> DeactivateUser(string userId)
