@@ -8,9 +8,11 @@
     public class Shipment
     {
         public int Id { get; set; }
-
-        // public string ShipmentCode { get; set; } = string.Empty; 
-        public string TrackingNumber { get; set; } = string.Empty; // OK342764WR. Sample tracking mumber OKOTA TO WARRI
+        public string ShipmentCode { get; set; } = string.Empty; //  // OK342764WR. Sample tracking mumber OKOTA TO WARRI
+        public string BillOfLadingNumber { get; set; } = string.Empty;
+        public string PortOfOrigin { get; set; } = string.Empty;
+        public string PortOfDestination { get; set; } = string.Empty;
+        public string VesselName { get; set; } = string.Empty;
         public DateTime ArrivalDate { get; set; }
         public DateTime? FreeUntilDate { get; set; }       // Last free day in our warehouse
         public DateTime? ActualReleaseDate { get; set; }   // When item was picked up from warehouse/terminals
@@ -26,6 +28,7 @@
         public string? AssignedDriverId { get; set; }
         public ApplicationUser? AssignedDriver { get; set; }
 
+        public ICollection<Container> Containers { get; set; } = new List<Container>();
         public ICollection<DemurrageRecord> DemurrageRecords { get; set; } = new List<DemurrageRecord>();
         public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
         public ICollection<Document> Documents { get; set; } = new List<Document>();

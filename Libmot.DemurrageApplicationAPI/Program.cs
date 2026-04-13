@@ -116,10 +116,10 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Seeding Roles & SuperAdmin 
-//using (var scope = app.Services.CreateScope())
-//{
-    //await DbSeeder.SeedAsync(scope.ServiceProvider);
-//}
+using (var scope = app.Services.CreateScope())
+{
+    await DbSeeder.SeedAsync(scope.ServiceProvider);
+}
 
 
 

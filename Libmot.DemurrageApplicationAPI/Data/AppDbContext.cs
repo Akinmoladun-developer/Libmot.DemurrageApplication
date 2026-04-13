@@ -13,6 +13,7 @@ namespace Libmot.DemurrageApplicationAPI.Data
         }
 
         public DbSet<Shipment> Shipments => Set<Shipment>();
+        public DbSet<Container> Containers => Set<Container>();
         public DbSet<DemurrageTier> DemurrageTiers => Set<DemurrageTier>();
         public DbSet<DemurrageRecord> DemurrageRecords => Set<DemurrageRecord>();
         public DbSet<Invoice> Invoices => Set<Invoice>();
