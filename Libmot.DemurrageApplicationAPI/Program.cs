@@ -1,6 +1,6 @@
-using Libmot.DemurrageApplicationAPI.Data;
-using Libmot.DemurrageApplicationAPI.Models;
-using Libmot.DemurrageApplicationAPI.Services;
+using Libmot.DemurrageApplication.Data;
+using LibmotExpress.DemurrageApi.Models;
+using Libmot.DemurrageApplication.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -19,18 +19,6 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DemurrageAppConnectionString")));
-
-// Adding Identity Serivdes 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-{
-    options.Password.RequireDigit = true;
-    options.Password.RequiredLength = 8;
-    options.Password.RequireUppercase = true;
-    options.Password.RequireNonAlphanumeric = false;
-    options.User.RequireUniqueEmail = true;
-})
-.AddEntityFrameworkStores<AppDbContext>()
-.AddDefaultTokenProviders();
 
 // Adding JWT Authentication 
 var jwt = builder.Configuration.GetSection("JwtSettings");
@@ -63,19 +51,12 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("AllStaff", p => p.RequireRole("SuperAdmin", "FinanceBillingOfficer", "DriverDispatch"));
 });
 
-// Adding Application Services
-builder.Services.AddScoped<IAuthService, AuthService>();
-//builder.Services.AddScoped<IShipmentService, ShipmentService>();
-//builder.Services.AddScoped<IDemurrageService, DemurrageService>();
-//builder.Services.AddScoped<IInvoiceService, InvoiceService>();
-//builder.Services.AddScoped<INotificationService, NotificationService>();
-//builder.Services.AddScoped<IReportService, ReportService>();
-//builder.Services.AddScoped<IDocumentService, DocumentService>();
+
 
 // Adding AutoMapper Services for conversion of Domain Models
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-// ?? Controllers + Swagger ?????????????????????????????????
+// Adding Controllers + Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -106,20 +87,10 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// CQRS 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
-        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-});
+
 
 var app = builder.Build();
 
-// Seeding Roles & SuperAdmin 
-using (var scope = app.Services.CreateScope())
-{
-    await DbSeeder.SeedAsync(scope.ServiceProvider);
-}
 
 
 
