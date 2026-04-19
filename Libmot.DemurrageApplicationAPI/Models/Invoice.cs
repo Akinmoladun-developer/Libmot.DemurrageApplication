@@ -1,33 +1,31 @@
-﻿namespace Libmot.DemurrageApplicationAPI.Models
+﻿using LibmotExpress.DemurrageApi.Models;
+
+namespace Libmot.DemurrageApplication.Models;
+public enum InvoiceStatus
 {
-    public enum InvoiceStatus { Draft, Issued, PartiallyPaid, Paid, Overdue, Cancelled }
-    public enum PaymentMethod { BankTransfer, Cash, OnlinePayment }
-
-    public class Invoice
-    {
-        public int Id { get; set; }
-        public string InvoiceNumber { get; set; } = string.Empty;  // e.g. INV-2024-00001
-        public DateTime IssuedDate { get; set; } = DateTime.UtcNow;
-        public DateTime DueDate { get; set; }
-        public decimal SubTotal { get; set; }
-        public decimal TaxAmount { get; set; }        // VAT 7.5%
-        public decimal TotalAmount { get; set; }
-        public decimal AmountPaid { get; set; } = 0;
-        public decimal BalanceDue => TotalAmount - AmountPaid;
-        public InvoiceStatus Status { get; set; } = InvoiceStatus.Draft;
-        public PaymentMethod? PaymentMethod { get; set; }
-        public DateTime? PaymentDate { get; set; }
-        public string? PaymentReference { get; set; }
-        public string? Notes { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        public int ShipmentId { get; set; }
-        public Shipment Shipment { get; set; } = null!;
-
-        public string CustomerId { get; set; } = string.Empty;
-        public ApplicationUser Customer { get; set; } = null!;
-
-        public ICollection<InvoiceLineItem> LineItems { get; set; } = new List<InvoiceLineItem>();
-        public ICollection<DemurrageRecord> DemurrageRecords { get; set; } = new List<DemurrageRecord>();
-    }
+    Unpaid,
+    PartiallyPaid,
+    Paid,
+    Overdue,
+    Disputed,
+    Cancelled
 }
+public class Invoice
+{
+    public int Id { get; set; }
+    public string InvoiceNumber { get; set; } = string.Empty;
+    public int ShipmentId { get; set; }
+    public Shipment Shipment { get; set; } = null!;
+    public int CustomerId { get; set; }
+    public Customer Customer { get; set; } = null!;
+    public decimal TotalAmount { get; set; }
+    public InvoiceStatus Status { get; set; } = InvoiceStatus.Unpaid;
+    public DateTime IssuedDate { get; set; } = DateTime.UtcNow;
+    public DateTime DueDate { get; set; }
+    public DateTime? PaidDate { get; set; }
+    public string? PdfPath { get; set; }
+    public string? Notes { get; set; }
+    public bool IsSystemGenerated { get; set; } = true;
+    public ICollection<Payment> Payments { get; set; } = new List<Payment>();
+}
+

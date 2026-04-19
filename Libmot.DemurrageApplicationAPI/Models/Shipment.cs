@@ -1,33 +1,43 @@
-﻿namespace Libmot.DemurrageApplicationAPI.Models
+﻿using Libmot.DemurrageApplication.Models;
+
+namespace LibmotExpress.DemurrageApi.Models;
+public enum ShipmentStatus
 {
-    public enum ShipmentStatus
-    {
-        Pending, InTransit, Released, Delivered, Disputed
-    }
+    Pending,
+    InTransit,
+    ArrivedAtDestination,
+    DemurrageActive,
+    PickedUp,
+    Closed,
+    Cancelled
+}
 
-    public class Shipment
-    {
-        public int Id { get; set; }
 
-        // public string ShipmentCode { get; set; } = string.Empty; 
-        public string TrackingNumber { get; set; } = string.Empty; // OK342764WR. Sample tracking mumber OKOTA TO WARRI
-        public DateTime ArrivalDate { get; set; }
-        public DateTime? FreeUntilDate { get; set; }       // Last free day in our warehouse
-        public DateTime? ActualReleaseDate { get; set; }   // When item was picked up from warehouse/terminals
-        public ShipmentStatus Status { get; set; }
-        public int FreeDaysAllowed { get; set; } = 7;      // Default free days allowed 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // FK to access customer's
-        public string CustomerId { get; set; } = string.Empty;
-        public ApplicationUser Customer { get; set; } = null!;
-
-        // FK - Assigned Driver
-        public string? AssignedDriverId { get; set; }
-        public ApplicationUser? AssignedDriver { get; set; }
-
-        public ICollection<DemurrageRecord> DemurrageRecords { get; set; } = new List<DemurrageRecord>();
-        public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
-        public ICollection<Document> Documents { get; set; } = new List<Document>();
-    }
+public class Shipment
+{
+    public int Id { get; set; }
+    public string WaybillNumber { get; set; } = string.Empty;
+    public int CustomerId { get; set; }
+    public Customer Customer { get; set; } = null!;
+    public string? DriverUserId { get; set; }
+    public ApplicationUser? Driver { get; set; }
+    public string OriginState { get; set; } = string.Empty;
+    public string DestinationState { get; set; } = string.Empty;
+    public string ItemDescription { get; set; } = string.Empty;
+    public decimal DeclaredValue { get; set; }
+    public decimal Weight { get; set; }
+    public ShipmentStatus Status { get; set; } = ShipmentStatus.Pending;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? ExpectedArrivalDate { get; set; }
+    public DateTime? ActualArrivalDate { get; set; }
+    public DateTime? FreeDaysExpiry { get; set; }   // ArrivalDate + 7
+    public DateTime? PickedUpAt { get; set; }
+    public bool IsDemurrageActive { get; set; } = false;
+    public string CreatedByUserId { get; set; } = string.Empty;
+    public ICollection<DemurrageAccrual> DemurrageAccruals { get; set; } = new List<DemurrageAccrual>();
+    public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
+    public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+    public ICollection<ShipmentDocument> Documents { get; set; } = new List<ShipmentDocument>();
+    public ICollection<DisputeLog> DisputeLogs { get; set; } = new List<DisputeLog>();
 }

@@ -1,4 +1,4 @@
-﻿namespace Libmot.DemurrageApplicationAPI.DTOs.Common
+﻿namespace Libmot.DemurrageApplicationAPI.Helpers
 {
     public class ApiResponse<T>
     {

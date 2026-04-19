@@ -2,9 +2,10 @@
 
 namespace Libmot.DemurrageApplicationAPI.DTOs.Auth
 {
-    public class LoginDto
+    public class LoginRequestDto
     {
-        [Required, EmailAddress]
+        [Required]
+        [EmailAddress]
         public string Email { get; set; } = string.Empty;
 
         [Required]
